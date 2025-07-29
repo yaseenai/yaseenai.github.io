@@ -1,0 +1,92 @@
+<style>
+        .masthead {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #f8f8f8;
+            position: relative;
+        }
+        .masthead__menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+        .masthead__menu ul li {
+            margin: 0 10px;
+        }
+        .masthead__menu ul li a {
+            text-decoration: none;
+            color: #000;
+        }
+        .masthead__menu .dropdown {
+            display: none;
+            flex-direction: column;
+            background-color: #fff;
+            position: absolute;
+            top: 60px;
+            right: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        .masthead__menu .dropdown li {
+            margin: 5px 0;
+        }
+        .toggle-btn {
+            display: none;
+            background-color: transparent;
+            border: none;
+            font-size: 30px;
+            cursor: pointer;
+            position: absolute;
+            right: 10px; /* Align toggle icon to the right */
+            bottom: 10px;
+        }
+        @media (max-width: 768px) {
+            .masthead__menu ul {
+                display: none;
+            }
+            .toggle-btn {
+                display: block;
+            }
+        }
+    </style>
+
+<div class="masthead">
+   <div class="masthead__inner-wrap">
+       <button class="toggle-btn" onclick="toggleMenu()">☰</button>
+       <div class="masthead__menu">
+           <ul class="visible-links">
+               <li style="font-size: medium;"><a href="index.html">Home</a></li>
+               <li style="font-size: medium;"><a href="experience.html">Experience</a></li>
+               <li style="font-size: medium;"><a href="ml-projects.html">ML Projects</a></li>
+               <li style="font-size: medium;"><a href="sde-projects.html">SDE Projects</a></li>
+               <li style="font-size: medium;"><a href="other-projects.html">Other Projects</a></li>
+               <li style="font-size: medium;"><a href="skills.html">Skills</a></li>
+               <li style="font-size: medium;"><a href="files/Muhammad Yaseen Resume.pdf" target="_blank" rel="noopener noreferrer">Resume</a></li>
+           </ul>
+           <ul class="dropdown">
+               <li style="font-size: medium;"><a href="index.html">Home</a></li>
+               <li style="font-size: medium;"><a href="experience.html">Experience</a></li>
+               <li style="font-size: medium;"><a href="ml-projects.html">ML Projects</a></li>
+               <li style="font-size: medium;"><a href="sde-projects.html">SDE Projects</a></li>
+               <li style="font-size: medium;"><a href="other-projects.html">Other Projects</a></li>
+               <li style="font-size: medium;"><a href="skills.html">Skills</a></li>
+               <li style="font-size: medium;"><a href="files/Muhammad Yaseen Resume.pdf" target="_blank" rel="noopener noreferrer">Resume</a></li>
+           </ul>
+       </div>
+   </div>
+</div>
+
+<script>
+   function toggleMenu() {
+       const dropdown = document.querySelector('.masthead__menu .dropdown');
+       if (dropdown.style.display === 'flex') {
+           dropdown.style.display = 'none';
+       } else {
+           dropdown.style.display = 'flex';
+       }
+   }
+</script>
