@@ -1,0 +1,227 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy-deep: #060b14;
+  --color-navy: #0a0f1d;
+  --color-navy-surface: #111827;
+  --color-navy-card: #151d2e;
+  --color-navy-border: #1e2a3f;
+  --color-gold: #c9a84c;
+  --color-gold-light: #d4b96a;
+  --color-gold-dim: rgba(201, 168, 76, 0.15);
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+  --font-display: var(--font-display), Georgia, serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-mono), monospace;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-gold) transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-navy-deep);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: var(--color-gold-dim);
+  color: #fff;
+}
+
+/* Section divider */
+.section-divider {
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+.section-divider hr {
+  border: none;
+  border-top: 1px solid var(--color-navy-border);
+}
+
+/* Gold accent line */
+.accent-line {
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-gold), transparent);
+  border-radius: 1px;
+}
+
+/* Skill tag styles */
+.skill-tag {
+  background: var(--color-navy-card);
+  border: 1px solid var(--color-navy-border);
+  color: var(--color-text-secondary);
+  transition: all 0.2s;
+}
+
+.skill-tag:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  background: var(--color-gold-dim);
+}
+
+/* Service card */
+.service-card {
+  background: var(--color-navy-card);
+  border: 1px solid var(--color-navy-border);
+  transition: border-color 0.3s;
+}
+
+.service-card:hover {
+  border-color: var(--color-gold);
+}
+
+/* Project card */
+.project-card {
+  background: var(--color-navy-card);
+  border: 1px solid var(--color-navy-border);
+  transition: all 0.3s;
+}
+
+.project-card:hover {
+  border-color: rgba(201, 168, 76, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Experience card */
+.exp-card {
+  background: var(--color-navy-card);
+  border: 1px solid var(--color-navy-border);
+}
+
+.exp-card.current {
+  border-color: rgba(201, 168, 76, 0.3);
+  background: linear-gradient(135deg, var(--color-navy-card), rgba(201, 168, 76, 0.03));
+}
+
+/* Filter tab */
+.filter-tab {
+  color: var(--color-text-muted);
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.filter-tab:hover {
+  color: var(--color-text-secondary);
+}
+
+.filter-tab.active {
+  color: var(--color-gold);
+  border-bottom-color: var(--color-gold);
+}
+
+/* Stat number */
+.stat-number {
+  font-family: var(--font-mono);
+  color: var(--color-gold);
+}
+
+/* Nav active */
+.nav-link {
+  color: var(--color-text-muted);
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: var(--color-text-primary);
+}
+
+.nav-link.active {
+  color: var(--color-gold);
+}
+
+/* Footer */
+.footer-link {
+  color: var(--color-text-muted);
+  transition: color 0.2s;
+}
+
+.footer-link:hover {
+  color: var(--color-gold);
+}
+
+/* Button styles */
+.btn-primary {
+  background: var(--color-gold);
+  color: #060b14;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  background: var(--color-gold-light);
+  box-shadow: 0 0 20px rgba(201, 168, 76, 0.15);
+}
+
+.btn-outline {
+  border: 1px solid var(--color-navy-border);
+  color: var(--color-text-primary);
+  background: transparent;
+  transition: all 0.2s;
+}
+
+.btn-outline:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+}
+
+/* Form input */
+.form-input {
+  background: var(--color-navy-card);
+  border: 1px solid var(--color-navy-border);
+  color: var(--color-text-primary);
+  transition: border-color 0.2s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-gold);
+}
+
+.form-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* Pulse dot */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* Subtle background pattern */
+.bg-pattern {
+  background-image:
+    radial-gradient(circle at 25% 25%, rgba(201, 168, 76, 0.02) 0%, transparent 40%),
+    radial-gradient(circle at 75% 75%, rgba(201, 168, 76, 0.02) 0%, transparent 40%);
+}
+
+/* Page transition */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.5s ease-out both;
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
