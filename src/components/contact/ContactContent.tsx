@@ -1,17 +1,92 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, type RefObject } from "react";
 import { motion } from "framer-motion";
 import { socialData } from "@/data/social";
 
-export default function ContactContent() {
+function BuildUrls({
+  email,
+  nameRef,
+  emailRef,
+  subjectRef,
+  bodyRef,
+}: {
+  email: string;
+  nameRef: RefObject<HTMLInputElement | null>;
+  emailRef: RefObject<HTMLInputElement | null>;
+  subjectRef: RefObject<HTMLInputElement | null>;
+  bodyRef: RefObject<HTMLTextAreaElement | null>;
+}) {
   const [copied, setCopied] = useState(false);
 
-  const copyEmail = () => {
-    navigator.clipboard.writeText(socialData.email);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const getParams = () => {
+    const name = nameRef.current?.value || "";
+    const sender = emailRef.current?.value || "";
+    const subject = subjectRef.current?.value || "";
+    const body = bodyRef.current?.value || "";
+    const fullBody = sender || name ? `From: ${name}${sender ? ` (${sender})` : ""}\n\n${body}` : body;
+    return { subject: encodeURIComponent(subject), body: encodeURIComponent(fullBody) };
   };
+
+  const openGmail = () => {
+    const { subject, body } = getParams();
+    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`, "_blank", "noopener,noreferrer");
+  };
+
+  const openOutlook = () => {
+    const { subject, body } = getParams();
+    window.open(`https://outlook.live.com/mail/0/deeplink/compose?to=${email}&subject=${subject}&body=${body}`, "_blank", "noopener,noreferrer");
+  };
+
+  const copyEmail = () => {
+    navigator.clipboard.writeText(email).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  return (
+    <div className="space-y-5">
+      {/* Email display + copy */}
+      <div className="flex items-center justify-between rounded-lg border border-gold/20 bg-gold-dim px-4 py-3">
+        <div className="flex items-center gap-3">
+          <svg className="h-5 w-5 text-gold flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+          <span className="text-sm font-medium text-text-primary">{email}</span>
+        </div>
+        <button
+          onClick={copyEmail}
+          className="text-xs font-medium text-gold hover:text-gold-light transition-colors flex-shrink-0"
+        >
+          {copied ? "Copied!" : "Copy"}
+        </button>
+      </div>
+
+      {/* Gmail + Outlook buttons */}
+      <div className="grid gap-3 sm:grid-cols-2">
+        <button
+          onClick={openGmail}
+          className="flex items-center justify-center gap-2 rounded-lg border border-navy-border bg-navy-card px-5 py-3 text-sm font-medium text-text-primary hover:border-accent-cyan/30 hover:bg-accent-cyan/5 transition-all"
+        >
+          <svg className="h-5 w-5 text-red-400" viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 010 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
+          Open in Gmail
+        </button>
+        <button
+          onClick={openOutlook}
+          className="flex items-center justify-center gap-2 rounded-lg border border-navy-border bg-navy-card px-5 py-3 text-sm font-medium text-text-primary hover:border-accent-cyan/30 hover:bg-accent-cyan/5 transition-all"
+        >
+          <svg className="h-5 w-5 text-blue-400" viewBox="0 0 24 24" fill="currentColor"><path d="M21.33 21.33 21.33 21.33C21.33 21.33 21.33 21.33 21.33 21.33 21.33 21.33 21.33 21.33 21.33 21.33 21.33 21.33 21.33 21.33 21.33 21.33 21.33 21.33 21.33 21.33 21.33 21.33M7.33 4.67 7.33 4.67C7.33 4.67 7.33 4.67 7.33 4.67 7.33 4.67 7.33 4.67 7.33 4.67 7.33 4.67 7.33 4.67 7.33 4.67M12 2 2 5.33 2 18.67 12 22 22 18.67 22 5.33 12 2Z"/></svg>
+          Open in Outlook
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default function ContactContent() {
+  const nameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const subjectRef = useRef<HTMLInputElement>(null);
+  const bodyRef = useRef<HTMLTextAreaElement>(null);
 
   return (
     <section className="pt-24 pb-24">
@@ -48,11 +123,11 @@ export default function ContactContent() {
               {
                 label: "Email",
                 value: socialData.email,
-                action: copyEmail,
+                href: `mailto:${socialData.email}`,
+                buttonText: "Send Email",
                 icon: (
                   <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                 ),
-                buttonText: copied ? "Copied!" : "Copy",
               },
               {
                 label: "GitHub",
@@ -88,11 +163,7 @@ export default function ContactContent() {
                     <p className="text-sm text-text-primary">{item.value}</p>
                   </div>
                 </div>
-                {item.action ? (
-                  <button onClick={item.action} className="text-xs text-gold hover:text-gold-light transition-colors font-medium">
-                    {item.buttonText}
-                  </button>
-                ) : item.href ? (
+                {item.href ? (
                   <a href={item.href} target="_blank" rel="noopener noreferrer" className="text-xs text-gold hover:text-gold-light transition-colors font-medium">
                     {item.buttonText}
                   </a>
@@ -101,7 +172,7 @@ export default function ContactContent() {
             ))}
           </motion.div>
 
-          {/* Contact Form */}
+          {/* Email & Webmail */}
           <motion.div
             initial={{ opacity: 0, x: 24 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -109,61 +180,67 @@ export default function ContactContent() {
             transition={{ duration: 0.5 }}
             className="lg:col-span-3 exp-card rounded-xl p-8"
           >
-            <h3 className="text-lg font-semibold text-text-primary mb-6">
-              Send a Message
+            <h3 className="text-lg font-semibold text-text-primary mb-2">
+              Reach Out
             </h3>
-            <form
-              action={`mailto:${socialData.email}`}
-              method="POST"
-              encType="text/plain"
-              className="space-y-5"
-            >
-              <div className="grid gap-5 sm:grid-cols-2">
+            <p className="text-sm text-text-muted mb-6">
+              Fill the fields below, then open your preferred email client — the message will be pre-filled.
+            </p>
+
+            {/* Form fields */}
+            <div className="space-y-4 mb-8">
+              <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="block text-xs text-text-muted uppercase tracking-wider mb-2">Name</label>
+                  <label htmlFor="contact-name" className="block text-xs text-text-muted uppercase tracking-wider mb-2">Your Name</label>
                   <input
+                    id="contact-name"
+                    ref={nameRef}
                     type="text"
-                    name="name"
-                    required
-                    placeholder="Your name"
+                    placeholder="John Doe"
                     className="form-input w-full rounded-lg px-4 py-2.5 text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-text-muted uppercase tracking-wider mb-2">Email</label>
+                  <label htmlFor="contact-email" className="block text-xs text-text-muted uppercase tracking-wider mb-2">Your Email</label>
                   <input
+                    id="contact-email"
+                    ref={emailRef}
                     type="email"
-                    name="email"
-                    required
                     placeholder="you@example.com"
                     className="form-input w-full rounded-lg px-4 py-2.5 text-sm"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-xs text-text-muted uppercase tracking-wider mb-2">Subject</label>
+                <label htmlFor="contact-subject" className="block text-xs text-text-muted uppercase tracking-wider mb-2">Subject</label>
                 <input
+                  id="contact-subject"
+                  ref={subjectRef}
                   type="text"
-                  name="subject"
-                  required
                   placeholder="Project Inquiry / Collaboration"
                   className="form-input w-full rounded-lg px-4 py-2.5 text-sm"
                 />
               </div>
               <div>
-                <label className="block text-xs text-text-muted uppercase tracking-wider mb-2">Message</label>
+                <label htmlFor="contact-body" className="block text-xs text-text-muted uppercase tracking-wider mb-2">Message</label>
                 <textarea
-                  name="body"
-                  required
-                  rows={5}
+                  id="contact-body"
+                  ref={bodyRef}
+                  rows={4}
                   placeholder="Tell me about your project or opportunity..."
                   className="form-input w-full rounded-lg px-4 py-3 text-sm resize-none"
                 />
               </div>
-              <button type="submit" className="btn-primary rounded-lg px-6 py-3 text-sm w-full sm:w-auto">
-                Send Message
-              </button>
-            </form>
+            </div>
+
+            {/* Construct URLs */}
+            <BuildUrls
+              email={socialData.email}
+              nameRef={nameRef}
+              emailRef={emailRef}
+              subjectRef={subjectRef}
+              bodyRef={bodyRef}
+            />
           </motion.div>
         </div>
       </div>
