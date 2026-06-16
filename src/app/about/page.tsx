@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import BioSection from "@/components/about/BioSection";
 import SkillsTags from "@/components/about/SkillsTags";
 import EducationSection from "@/components/about/EducationSection";
+import CertificationsSection from "@/components/about/CertificationsSection";
 
 export const metadata: Metadata = {
   title: "About",
@@ -15,6 +16,7 @@ export default function AboutPage() {
       <BioSection />
       <SkillsTags />
       <EducationSection />
+      <CertificationsSection />
     </div>
   );
 }
